@@ -14,17 +14,82 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   movies.init({
-    title: DataTypes.STRING,
-    synopsis: DataTypes.STRING,
-    trailer: DataTypes.STRING,
-    poster: DataTypes.STRING,
-    category: DataTypes.STRING,
-    release_date: DataTypes.STRING,
-    director: DataTypes.STRING,
-    featured_song: DataTypes.STRING,
-    budget: DataTypes.INTEGER,
-
-  }, {
+    title: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "Title must be filled! thanks."
+        }
+      }
+    },
+    synopsis: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "Synopsis must be filled! thanks."
+        }
+      }
+    },
+    trailer:{
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "trailer must be filled! thanks."
+        }
+      }
+    },
+    poster: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "Poster must be filled! thanks."
+        }
+        // isUrl : {
+        //   msg : "Poster must be URL format."
+        // }
+      }
+    },
+    category: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "Category must be filled! thanks."
+        }
+      }
+    },
+    release_date: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "release_date must be filled! thanks."
+        }
+      }
+    },
+    director: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "Director must be filled! thanks."
+        }
+      }
+    },
+    featured_song: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "Featured song must be filled! thanks."
+        }
+      }
+    },
+    budget: {
+      type : DataTypes.INTEGER,
+      validate : {
+        notEmpty : {
+          msg : "Budget must be filled! thanks."
+        }
+      }
+    },
+  },{
     sequelize,
     modelName: 'movies',
   });
