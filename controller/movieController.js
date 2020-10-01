@@ -3,7 +3,7 @@ const { movies } = require('../models/movies')
 class MovieController {
     static async getMovie (req, res) {
         try {
-            const result = await Movies.findAll({
+            const result = await movies.findAll({
                 order : [
                     ['id', 'ASC']
                 ]
@@ -14,16 +14,11 @@ class MovieController {
         }
     }
 
-    static addMovieForm(req, res) {
-        // res.render("addProducts.ejs");
-        res.send("add movie page")
-	}
-
     static async addMovie (req, res) {
         const { title, synopsis, trailer, poster } = req.body;
 
         try {
-            const found = await Movies.findOne({
+            const found = await movies.findOne({
                 where: {
                     title
                 }
@@ -33,7 +28,7 @@ class MovieController {
                     msg : "Title already exist, try another title."
                 })
             } else {
-                const movie = await Movies.create({
+                const movie = await movies.create({
                     title, synopsis, trailer, poster
                 })
                 res.status(201).json(movie)
@@ -42,23 +37,7 @@ class MovieController {
             req.status(500).json(err)
         }
     }
-    static async UpdateMovieForm(req,res,next){
-        const id = req.params.id
-        try {
-            const found = await movies.findOne({
-                where : {
-                    id
-                }
-            })
-            if (found) {
-                res.render('editMovieForm.ejs', {movie : found})
-            }
-        }
-        catch (err){
-            next(err)
-        }
-
-    }
+   
     static async UpdateMovie(req,res, next) {
         const { title, synopsis, trailer } = req.body
         const UserId = req.movies.id
@@ -78,7 +57,7 @@ class MovieController {
             }
             
             res.status(201).json({
-                msg : "Movies Updated"
+                msg : "movies Updated"
             })
         } catch (err) {
             next(err)

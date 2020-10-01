@@ -4,9 +4,8 @@ const userController = require('../controller/userController')
 
 router.get('/all',userController.getAllUser)
 router.get('/list/:id',userController.getById)
-router.get('/add',userController.registerForm)
 
-router.post('/add',userController.addUsers)
+router.post('/register',userController.addUsers)
 
 
 module.exports = router

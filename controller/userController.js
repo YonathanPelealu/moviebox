@@ -33,9 +33,6 @@ class UsersController {
         }
 
     }
-    static registerForm (req, res){
-        res.render('/register.ejs')
-    }
     static async addUsers (req,res,next) {
         const { fullname, email,password} = req.body
         try {
@@ -46,7 +43,6 @@ class UsersController {
             })
             if (found) {
                 res.send('email already exist, please login')
-                // res.redirect('/login.ejs')
             }else {
                 const user = await users.create({
                     fullname,email,password
