@@ -10,7 +10,7 @@ class MovieController {
                 }
             })
             if (found) {
-                res.render('editMovieForm.ejs', {movie : found})
+                res.send({movies : found})
             }
         }
         catch (err){
