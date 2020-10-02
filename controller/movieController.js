@@ -3,7 +3,7 @@ const { movies } = require('../models/movies')
 class MovieController {
     static async getMovie (req, res) {
         try {
-            const result = await Movies.findAll({
+            const result = await movies.findAll({
                 order : [
                     ['id', 'ASC']
                 ]
@@ -23,7 +23,7 @@ class MovieController {
         const { title, synopsis, trailer, poster } = req.body;
 
         try {
-            const found = await Movies.findOne({
+            const found = await movies.findOne({
                 where: {
                     title
                 }
@@ -33,7 +33,7 @@ class MovieController {
                     msg : "Title already exist, try another title."
                 })
             } else {
-                const movie = await Movies.create({
+                const movie = await movies.create({
                     title, synopsis, trailer, poster
                 })
                 res.status(201).json(movie)
@@ -51,7 +51,7 @@ class MovieController {
                 }
             })
             if (found) {
-                res.send({movies : found})
+                res.render('editMovieForm.ejs', {movie : found})
             }
         }
         catch (err){
@@ -78,7 +78,7 @@ class MovieController {
             }
             
             res.status(201).json({
-                msg : "Movies Updated"
+                msg : "movies Updated"
             })
         } catch (err) {
             next(err)

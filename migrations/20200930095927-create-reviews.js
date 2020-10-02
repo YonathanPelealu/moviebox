@@ -8,15 +8,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user_id: {
+      userId: {
         type: Sequelize.INTEGER
       },
-      mavie_id: {
+      movieId: {
         type: Sequelize.INTEGER
       },
       review: {
         type: Sequelize.STRING
       },
+      rate: {
+        type: Sequelize.INTEGER
+      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

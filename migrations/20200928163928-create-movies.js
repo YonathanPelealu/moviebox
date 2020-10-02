@@ -35,6 +35,9 @@ module.exports = {
       budget: {
         type: Sequelize.INTEGER
       },
+      rate: {
+        type: Sequelize.INTEGER
+      },
 
 
       createdAt: {

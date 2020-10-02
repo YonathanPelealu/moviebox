@@ -1,4 +1,6 @@
 const { users } = require('../models')
+const {decryptPwd} = require('../helpers/bcrypt')
+const{tokenGenerator} = require('../helpers/jwt')
 
 class UsersController {
     static async getAllUser (req, res, next) {
@@ -33,10 +35,7 @@ class UsersController {
         }
 
     }
-    static registerForm (req, res){
-        res.render('/register.ejs')
-    }
-    static async addUsers (req,res,next) {
+    static async register (req,res,next) {
         const { fullname, email,password} = req.body
         try {
             const found = await users.findOne({
@@ -46,17 +45,40 @@ class UsersController {
             })
             if (found) {
                 res.send('email already exist, please login')
-                // res.redirect('/login.ejs')
             }else {
                 const user = await users.create({
                     fullname,email,password
                 })
-                res.status(200).json(user)
+                const access_token = tokenGenerator(user)
+                res.status(200).json({access_token})
             }
         }catch(err) {
             next(err)
         }
     }
-}
+    static async login (req, res, next) {
+        const { email,password } = req.body
+        try {
+            const user = await users.findOne({
+                where: {
+                    email
+                }
+            })
+            if (user) {
+                if(decryptPwd(password, user.password)){
 
+                    const access_token = tokenGenerator(user)
+                    res.status(200).json({access_token})
+                }else{
+                    res.status(404).json({
+                        msg : "password not correct"
+                    })
+                }
+            }
+            }
+            catch (err) {
+                res.status(500).json({err})
+            }
+    }
+}
 module.exports = UsersController
