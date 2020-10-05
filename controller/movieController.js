@@ -1,29 +1,25 @@
-const { movies } = require('../models/movies')
+const { movies } = require('../models')
 
 class MovieController {
-    static async getMovie (req, res) {
+    static async getMovie (req, res, next) {
         try {
-            const result = await Movies.findAll({
+            const result = await movies.findAll({
                 order : [
                     ['id', 'ASC']
                 ]
             })
             res.status(200).json(result)
         } catch (err) {
-            req.status(500).json(err)
+            // res.status(500).json(err)
+            next(err)
         }
     }
 
-    static addMovieForm(req, res) {
-        // res.render("addProducts.ejs");
-        res.send("add movie page")
-	}
-
-    static async addMovie (req, res) {
-        const { title, synopsis, trailer, poster } = req.body;
+    static async addMovie (req, res, next) {
+        const { title, synopsis, trailer, poster, category, release_date, director, featured_song, budget } = req.body;
 
         try {
-            const found = await Movies.findOne({
+            const found = await movies.findOne({
                 where: {
                     title
                 }
@@ -33,58 +29,70 @@ class MovieController {
                     msg : "Title already exist, try another title."
                 })
             } else {
-                const movie = await Movies.create({
-                    title, synopsis, trailer, poster
+                const movie = await movies.create({
+                    title, synopsis, trailer, poster, category, release_date, director, featured_song, budget
                 })
                 res.status(201).json(movie)
             }
         } catch (err) {
-            req.status(500).json(err)
+            // res.status(500).json(err)
+            next(err)
         }
     }
-    static async UpdateMovieForm(req,res,next){
+
+    static async findById (req, res, next) {
+        const id = req.params.id;
+
+        try {
+            const result = await movies.findOne({
+                where : { id }
+            })
+            res.status(200).json(result)
+        } catch (err) {
+            // res.status(500).json(err)
+            next(err)
+        }
+    }
+
+    static async findCategory (req, res, next) {
+        const {category}  = req.body;
+        try {
+            const result = await movies.findAll({
+                
+                where : { category }
+            })
+            if (result) {
+                res.status(200).json(result)    
+            }
+        } catch (err) {
+            // res.status(500).json(err)
+            next(err)
+        }
+    }
+    
+    static async UpdateMovie(req,res, next) {
+        const { title, synopsis, trailer, poster, category, release_date, director, featured_song, budget } = req.body;
         const id = req.params.id
         try {
             const found = await movies.findOne({
-                where : {
-                    id
-                }
-            })
+                where: { title }
+            });
             if (found) {
-                res.render('editMovieForm.ejs', {movie : found})
-            }
-        }
-        catch (err){
-            next(err)
-        }
-
-    }
-    static async UpdateMovie(req,res, next) {
-        const { title, synopsis, trailer } = req.body
-        const UserId = req.movies.id
-        try {
-            const found = await movies.findOne({ 
-                where : { id }
-            })
-            if (found) {
-                movies.update({
-                    title,
-                    synopsis,
-                    trailer,
-                    poster
-                })
+                res.status(409).json("Title already exist!, try another Title");
             } else {
-                res.send('Movie cannot updated')
+                const result = await movies.update({
+                    title, synopsis, trailer, poster, category, release_date, director, featured_song, budget},
+                    { where: { id }
+                });
+                res.status(200).json(result);
             }
-            
-            res.status(201).json({
-                msg : "Movies Updated"
-            })
         } catch (err) {
+            // res.status(500).json(err)
             next(err)
+        }
     }
-    }
-    static async deleteMovie(reeq,res,next) {
+
+    static async deleteMovie(req, res, next) {
         const id = req.params.id
 
         try {
@@ -96,8 +104,11 @@ class MovieController {
                 msg: "Movie deleted"
             })
         }catch (err) {
+            // res.status(500).json(err)
             next(err)
         }
     }
+
+   
 }
 module.exports = MovieController

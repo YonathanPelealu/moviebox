@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { encryptPwd } = require('../helpers/bcrypt');
 module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     /**
@@ -14,10 +15,47 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   users.init({
-    fullname: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
+    fullname: {
+      type: DataTypes.STRING,
+      validate: {
+          notEmpty: {
+              msg: "Full Name must be filled!"
+          }
+      }
+    },
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+          notEmpty: {
+              msg: "Email must be filled!"
+          },
+          isEmail : {
+            msg : "Input email format please!"
+          }
+      }
+    },
+    password: {
+      type: DataTypes.STRING,
+      validate: {
+          notEmpty: {
+              msg: "Password must be filled!"
+          }
+      }
+    },
+    image: {
+      type: DataTypes.STRING
+    },
+    role: {
+      type: DataTypes.STRING,
+      // defaultValue: "user"
+    }
   }, {
+    hooks: {
+      beforeCreate(user) {
+        user.role = "user"
+        user.password = encryptPwd(user.password)
+      }
+   }, 
     sequelize,
     modelName: 'users',
   });

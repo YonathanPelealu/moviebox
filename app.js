@@ -5,15 +5,16 @@ require('dotenv').config()
 const PORT = process.env.PORT || 3000
 
 const router = require('./routes')
+const errorHandling = require ('./middlewares/errorHandling')
 
 //MIDDLEWARES
 
-// app.set('view engine', 'ejs')
-app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 //routes
 app.use(router)
+app.use(errorHandling);
 
 app.listen(PORT, () => {
     console.log(`Server running on port : ${PORT}`);
