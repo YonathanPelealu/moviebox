@@ -3,10 +3,11 @@ const secretKey = process.env.SECRET_KEY
 
 
 const tokenGenerator = (user) => {
-    const { id,username,password } = user
+    const { id,email,role } = user
     return jwt.sign({
         id,
-        username,
+        email,
+        role
     }, secretKey)
 }
 

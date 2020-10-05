@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      movies.belongsToMany(models.characters, {
+        through: 'models.movieChars'
+      });
     }
   };
   movies.init({
@@ -44,9 +47,6 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty : {
           msg : "Poster must be filled! thanks."
         }
-        // isUrl : {
-        //   msg : "Poster must be URL format."
-        // }
       }
     },
     category: {

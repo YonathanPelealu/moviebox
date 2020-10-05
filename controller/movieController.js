@@ -1,4 +1,4 @@
-const { movies } = require('../models/movies')
+const { movies } = require('../models')
 
 class MovieController {
     static async getMovie (req, res, next) {
@@ -10,6 +10,7 @@ class MovieController {
             })
             res.status(200).json(result)
         } catch (err) {
+            // res.status(500).json(err)
             next(err)
         }
     }
@@ -34,41 +35,64 @@ class MovieController {
                 res.status(201).json(movie)
             }
         } catch (err) {
+            // res.status(500).json(err)
+            next(err)
+        }
+    }
+
+    static async findById (req, res, next) {
+        const id = req.params.id;
+
+        try {
+            const result = await movies.findOne({
+                where : { id }
+            })
+            res.status(200).json(result)
+        } catch (err) {
+            // res.status(500).json(err)
+            next(err)
+        }
+    }
+
+    static async findCategory (req, res, next) {
+        const {category}  = req.body;
+        try {
+            const result = await movies.findAll({
+                
+                where : { category }
+            })
+            if (result) {
+                res.status(200).json(result)    
+            }
+        } catch (err) {
+            // res.status(500).json(err)
             next(err)
         }
     }
     
     static async UpdateMovie(req,res, next) {
-        const { title, synopsis, trailer, poster, category, release_date, director, featured_song, budget } = req.body
-        const UserId = req.movies.id
+        const { title, synopsis, trailer, poster, category, release_date, director, featured_song, budget } = req.body;
+        const id = req.params.id
         try {
-            const found = await movies.findOne({ 
-                where : { id }
-            })
+            const found = await movies.findOne({
+                where: { title }
+            });
             if (found) {
-                movies.update({
-                    title,
-                    synopsis,
-                    trailer,
-                    poster, 
-                    category,
-                    release_date, 
-                    director, 
-                    featured_song, 
-                    budget
-                })
+                res.status(409).json("Title already exist!, try another Title");
             } else {
-                res.send('Movie cannot updated')
+                const result = await movies.update({
+                    title, synopsis, trailer, poster, category, release_date, director, featured_song, budget},
+                    { where: { id }
+                });
+                res.status(200).json(result);
             }
-            
-            res.status(201).json({
-                msg : "Movies Updated"
-            })
         } catch (err) {
+            // res.status(500).json(err)
             next(err)
+        }
     }
-    }
-    static async deleteMovie(req,res,next) {
+
+    static async deleteMovie(req, res, next) {
         const id = req.params.id
 
         try {
@@ -80,34 +104,11 @@ class MovieController {
                 msg: "Movie deleted"
             })
         }catch (err) {
+            // res.status(500).json(err)
             next(err)
         }
     }
 
-    static async findById (req, res, next) {
-        const id = req.params.id;
-
-        try {
-            const result = movies.findOne({
-                where : { id }
-            })
-            res.status(200).json(result)
-        } catch (err) {
-            next(err)
-        }
-    }
-
-    static async findCategory (req, res, next) {
-        const { category } = req.body;
-
-        try {
-            const result = movies.findAll({
-                where : { category }
-            })
-            res.status(200).json(result)
-        } catch (err) {
-            next(err)
-        }
-    }
+   
 }
 module.exports = MovieController

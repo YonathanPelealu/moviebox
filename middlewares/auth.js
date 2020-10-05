@@ -1,4 +1,4 @@
-const { Product } = require('../models')
+const { users } = require('../models')
 const {tokenVerifier} = require('../helpers/jwt')
 
 const authentication = (req, res, next) => {
@@ -17,8 +17,19 @@ const authentication = (req, res, next) => {
             req.userData = decode
             next();
         }catch (err) {
-            res.status(400).json(err)
+            res.status(500).json(err)
         }
+    }
+}
+
+const isAdmin = (req, res, next) => {
+    const role = req.userData.role;
+    console.log('authorization works');
+
+    if (role === 'admin') {
+        next()
+    } else {
+        res.status(400).json("Acces denied!")
     }
 }
 
@@ -55,5 +66,5 @@ const authorization = (req,res,next) => {
 }
 
 module.exports = {
-    authentication,authorization
+    authentication, authorization, isAdmin
 }

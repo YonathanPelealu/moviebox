@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       release_date: {
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
       director: {
         type: Sequelize.STRING
