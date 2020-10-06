@@ -4,12 +4,13 @@ const movieRoutes = require('./movie')
 const userRoutes = require('./user')
 const characterRoutes = require('./character')
 const moviecharRoutes = require('./moviechar')
+const { upload } = require('../middlewares/multer')
 
 const movieController = require('../controller/movieController')
 const userController = require('../controller/userController')
 
 router.get('/', movieController.getMovie)
-router.post('/register',userController.addUsers)
+router.post('/register',upload.single('image'), userController.register)
 router.post('/login',userController.login)
 
 router.use('/movie',movieRoutes)
