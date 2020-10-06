@@ -1,9 +1,9 @@
 # TeamD-Backend
 
-```
+
 **RESTful endpoints**
 **POST /user/register**
-
+```
 register user
 default role value = "User"
 
@@ -24,8 +24,9 @@ Response (400 - Bad Request) [
 ]
 ```
 
-```
+
 **POST /user/login**
+```
 user login
 
 Request Header (not needed)
@@ -47,8 +48,9 @@ Response (400 - Bad Request)[
 ]
 ```
 
-```
+
 **GET /user/**
+```
 Get all Users
 
 
@@ -95,9 +97,9 @@ Response (403 - Forbidden) [
     }
 ]
 ```
-```
-Get User By Id
 
+**Get User By Id**
+```
 Request Header
 not needed
 
