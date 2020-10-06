@@ -1,12 +1,13 @@
 # TeamD-Backend
 
-    RESTful endpoints
-    POST /user/register
-
-    register user
-    default role value = "User"
-
 ```
+**RESTful endpoints**
+**POST /user/register**
+
+register user
+default role value = "User"
+
+
 Request Header 
 not needed
 
@@ -22,8 +23,7 @@ Response (400 - Bad Request) [
     }
 ]
 
-POST /user/login 
-
+**POST /user/login**
 user login
 
 Request Header (not needed)
@@ -44,8 +44,9 @@ Response (400 - Bad Request)[
     }
 ]
 
+**GET /user/**
 Get all Users
-GET /user/
+
 
 Request Header
 "<asset access_token>"
