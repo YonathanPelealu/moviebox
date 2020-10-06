@@ -22,7 +22,9 @@ Response (400 - Bad Request) [
         "msg": "<returned error message>"
     }
 ]
+```
 
+```
 **POST /user/login**
 user login
 
@@ -43,7 +45,9 @@ Response (400 - Bad Request)[
         "message": "<returned error message>"
     }
 ]
+```
 
+```
 **GET /user/**
 Get all Users
 
@@ -90,6 +94,8 @@ Response (403 - Forbidden) [
         "msg": "Access Denied"
     }
 ]
+```
+```
 Get User By Id
 
 Request Header
