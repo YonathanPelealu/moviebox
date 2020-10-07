@@ -1,12 +1,12 @@
-const { Router } = require('express')
-const router = Router()
+const { Router } = require('express');
+const router = Router();
 const userController = require('../controller/userController')
 const { authentication, isAdmin } = require('../middlewares/auth')
-
-router.get('/', authentication, isAdmin, userController.getAllUser)
-router.get('/update', authentication, userController.getById)
-router.put('/update',authentication, userController.editUsers)
-router.delete('/',authentication, userController.deleteUsers)
+const { upload } = require('../middlewares/multer')
 
 
-module.exports = router
+router.get('/list',authentication,isAdmin, userController.userList)
+router.get('/id/:id',userController.getUserById)
+router.put('/update',authentication,upload.single('image'),userController.updateProfile)
+
+module.exports = router 

@@ -11,13 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      characters.belongsToMany(models.movies, {
-        through: 'models.movieChars'
-      });
     }
   };
   characters.init({
-    name:  {
+    name: {
       type: DataTypes.STRING,
       validate: {
           notEmpty: {

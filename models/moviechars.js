@@ -11,8 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      movieChars.belongsTo(models.movies);
-      movieChars.belongsTo(models.characters);
     }
   };
   movieChars.init({
@@ -24,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
           }
       }
   },
-
     characterId: {
       type: DataTypes.INTEGER,
       validate: {
@@ -32,8 +29,7 @@ module.exports = (sequelize, DataTypes) => {
               msg: "Character Id must be filled!"
           }
       }
-  },
-
+  }
   }, {
     sequelize,
     modelName: 'movieChars',

@@ -1,115 +1,117 @@
 const { users } = require('../models')
-const { decryptPwd } = require('../helpers/bcrypt');
-const { tokenGenerator } = require('../helpers/jwt');
+const{decryptPwd} = require('../helpers/bcrypt')
+const {tokenGenerator} = require('../helpers/jwt')
 
-class UsersController {
-    static async getAllUser (req, res, next) {
+class userController {
+    static async userList (req, res, next) {
         try {
-            const result = await users.findAll({
-                order : [
-                    ['id','ASC']
-                ],
-            })
-            res.status(200).json(result)
+            const user = await users.findAll()
+            res.status(200).json(user)
         }
         catch (err) {
             next(err)
         }
     }
-    static async getById (req, res, next) {
-        const id = req.userData.id
-        try {
-            const result = await users.findOne({
-                where: {
-                    id
-                }
-            })
-            if (result) {
-                res.status(200).json(result)
-            } else {
-                res.send('user not found')
-            }
-        }
-        catch (err) {
-            next(err)
-        }
-
-    }
-    static registerForm (req, res){
-        res.render('/register.ejs')
-    }
-    static async addUsers (req,res,next) {
-        const { fullname, email, password} = req.body
+    static async getUserById (req, res, next) {
+        const id = req.params.id
         try {
             const found = await users.findOne({
-                where: {
-                     email 
+                where : {
+                    id : id
                 }
             })
             if (found) {
-                res.send('email already exist, please login')
-                // res.redirect('/login.ejs')
-            }else {
-                const user = await users.create({
-                    fullname,email,password
-                })
-                res.status(200).json(user)
-            }
-        }catch(err) {
+                res.status(200).json(
+                    {
+                        name : found.fullname,
+                        email : found.email,
+                        image : found.image
+                    })
+            }else{
+            res.status(404).json(
+                {
+                    msg : "User not Found"
+                }
+            )            }
+        }catch (err) {
+            console.log(err);
             next(err)
         }
     }
-
-    static async login (req, res, next) {
-        const { email, password } = req.body;
+    static async register (req, res, next) {
+        const { email, password, fullname,role } = req.body;
+        const image = req.file.path
         try {
-            const user = await users.findOne({
-                where: { email }
+            const user = await users.findOne({ 
+                where :{
+                    email
+                }
             })
             if (user) {
-                if (decryptPwd(password, user.password)) {
-                    const access_token = tokenGenerator(user)
-                    res.status(200).json({ access_token });
-                } else {
-                    res.status(400).json("Wrong Password!")
-                }
+                res.status(400).json({
+                    msg : "email already registered"
+                })
             } else {
-                res.status(404).json("User not found!")
+                const use = await users.create({
+                    email,password,fullname,image,role
+                })
+                const access_token = tokenGenerator(use)
+                res.status(200).json({acces_token : access_token});
             }
         } catch (err) {
-            next (err)
+            next(err)
         }
     }
-
-    static async editUsers (req, res, next) {
-        const id = req.userData.id;
-        const { fullname, image } = req.body;
-
+    static async login (req, res, next) {
+        const { email , password } = req.body
         try {
-            const result = await users.update({
-                fullname,
-                image
-            }, {
-                where: { id }
-            });
-            res.status(200).json(result);
-        } catch (err) {
-            next (err)
+            const userFound = await users.findOne ({
+                where: 
+                { 
+                    email
+                }
+            })
+            if (userFound) {
+                if (decryptPwd(password, userFound.password)) {
+                    const access_token = tokenGenerator(userFound)
+                    res.status(200).json({access_token : access_token})
+                } else {
+                    res.status(401).json({
+                        msg: "Incorrect Password"
+                    })
+                }
+            } else {
+
+                res.status(401).json({
+                    msg: "user not found"
+                })
+            }
+        } catch (err){
+            next(err)
         }
     }
-
-    static async deleteUsers (req, res, next) {
-        const id =req.userData.id;
+    static async updateProfile (req, res, next) {
+        const id = req.userData.id
+        const image = req.file.path
+        const { password, fullname, email } = req.body
 
         try {
-            const result = await users.destroy({
-                where: { id }
-            });
-            res.status(200).json("User deleted!");
-        } catch (err) {
-            next (err)
+            const updateprofile = await users.update({
+                image,password,fullname,email},
+                { where: 
+                    {id: id}
+            })
+            const newProfile = await users.findOne({
+                where: {id : id}
+            })
+            res.status(200).json({
+                Updated : newProfile
+            })
+        } 
+        catch (err) {
+            next(err)
         }
     }
 }
 
-module.exports = UsersController
+module.exports = userController

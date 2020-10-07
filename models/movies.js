@@ -1,4 +1,7 @@
 'use strict';
+
+const sequelizePaginate = require('sequelize-paginate')
+
 const {
   Model
 } = require('sequelize');
@@ -10,11 +13,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      movies.belongsToMany(models.characters, {
-        through: 'models.movieChars'
-      });
-    }
+      movies.belongsToMany(models.users, {through: 'models.reviews'})    }
   };
   movies.init({
     title: {
@@ -48,6 +47,14 @@ module.exports = (sequelize, DataTypes) => {
           msg : "Poster must be filled! thanks."
         }
       }
+    },
+    backdrop: {
+      type : DataTypes.STRING,
+      // validate : {
+      //   notEmpty : {
+      //     msg : "Poster must be filled! thanks."
+      //   }
+      // }
     },
     category: {
       type : DataTypes.STRING,
@@ -89,9 +96,11 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-  },{
+  }, {
     sequelize,
     modelName: 'movies',
+    
   });
+  sequelizePaginate.paginate(movies)
   return movies;
 };
