@@ -8,14 +8,21 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user_id: {
+      movieId: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
-      movie_id: {
+      userId: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
-      review: {
-        type: Sequelize.STRING
+      comment: {
+        allowNull: false,
+        type: Sequelize.TEXT
+      },
+      rate: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

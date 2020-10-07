@@ -1,20 +1,26 @@
-const { Router } = require('express')
-const router = Router()
-const movieRoutes = require('./movie')
+const { Router } = require('express');
+const router = Router();
 const userRoutes = require('./user')
-const characterRoutes = require('./character')
-const moviecharRoutes = require('./moviechar')
+const movieRoutes = require('./movie');
+const characterRoutes = require('./character');
+const reviewRoutes = require('./review');
+const { upload } = require('../middlewares/multer')
+
 
 const movieController = require('../controller/movieController')
 const userController = require('../controller/userController')
 
-router.get('/', movieController.getMovie)
-router.post('/register',userController.addUsers)
+
+router.get('/:page', movieController.getMovie)
+
+router.post('/register',upload.single('image'), userController.register)
 router.post('/login',userController.login)
 
-router.use('/movie',movieRoutes)
-router.use('/user',userRoutes)
-router.use('/character',characterRoutes)
-router.use('/moviechar',moviecharRoutes)
+router.post('/search',movieController.search)
 
-module.exports = router
+router.use('/user', userRoutes)
+router.use('/movie', movieRoutes)
+router.use('/character', characterRoutes)
+router.use('/review',reviewRoutes)
+
+module.exports = router;

@@ -1,8 +1,9 @@
 'use strict';
+const {encryptPwd} = require('../helpers/bcrypt')
+
 const {
   Model
 } = require('sequelize');
-const { encryptPwd } = require('../helpers/bcrypt');
 module.exports = (sequelize, DataTypes) => {
   class users extends Model {
     /**
@@ -11,51 +12,47 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      users.belongsToMany(models.movies, {through: 'models.reviews'})
       // define association here
     }
   };
   users.init({
-    fullname: {
-      type: DataTypes.STRING,
-      validate: {
-          notEmpty: {
-              msg: "Full Name must be filled!"
-          }
+    fullname:{
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "Password must be filled"
+        }
       }
-    },
+    }, 
     email: {
       type: DataTypes.STRING,
-      validate: {
-          notEmpty: {
-              msg: "Email must be filled!"
-          },
-          isEmail : {
-            msg : "Input email format please!"
-          }
+      validate : {
+        isEmail : { 
+          msg : "Email must be provided"
+        }
       }
-    },
-    password: {
-      type: DataTypes.STRING,
-      validate: {
-          notEmpty: {
-              msg: "Password must be filled!"
-          }
-      }
-    },
-    image: {
-      type: DataTypes.STRING
     },
     role: {
-      type: DataTypes.STRING,
-      // defaultValue: "user"
-    }
-  }, {
-    hooks: {
-      beforeCreate(user) {
-        user.role = "user"
-        user.password = encryptPwd(user.password)
+      type : DataTypes.STRING,
+      defaultValue: "User"
+    },
+    password: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : { 
+          msg : "Password must be provided"
+        }
       }
-   }, 
+    },
+    image: DataTypes.STRING
+  }, 
+  {
+    hooks: {
+      beforeCreate(users){
+        users.password = encryptPwd(users.password)
+      }
+    },
     sequelize,
     modelName: 'users',
   });

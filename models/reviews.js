@@ -10,30 +10,46 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      reviews.belongsTo(models.users)
+      reviews.belongsTo(models.movies)
     }
   };
   reviews.init({
-    user_id:  {
-      type: DataTypes.STRING,
+    movieId: {
+      type: DataTypes.INTEGER,
       validate: {
           notEmpty: {
-              msg: "User Id must be filled!"
+              msg: " must be filled!"
           }
       }
     },
-    movie_id:  {
-      type: DataTypes.STRING,
+    userId: {
+      type: DataTypes.INTEGER,
       validate: {
           notEmpty: {
-              msg: "Movie Id must be filled!"
+              msg: " must be filled!"
           }
       }
     },
-    review: DataTypes.STRING
+    comment: {
+      type :DataTypes.TEXT,
+      // validate : {
+      //   notEmpty: { 
+      //     msg : " must be filled!"
+      //   }
+      // }
+    },
+    rate: {
+      type: DataTypes.INTEGER,
+      validate: {
+          notEmpty: {
+              msg: " must be filled!"
+          }
+      }
+    }
   }, {
     sequelize,
-    modelName: 'reviews',
+    model: 'reviews',
   });
   return reviews;
 };

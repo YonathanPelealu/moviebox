@@ -14,11 +14,10 @@ class CharacterController {
             next(err)
         }
     }
-
     static async addChar (req, res, next) {
-        const { name } = req.body;
+        const name = req.body;
         const image = req.file.path
-        console.log(image)
+
         try {
             const found = await characters.findOne({
                 where: {
@@ -37,12 +36,9 @@ class CharacterController {
             }
         } catch (err) {
             // res.status(500).json(err)
-            console.log(err)
             next(err)
-           
         }
     }
-
     static async findById (req, res, next) {
         const id = req.params.id;
 
@@ -56,11 +52,9 @@ class CharacterController {
             next(err)
         }
     }
-    
     static async updateChar(req,res, next) {
-        const { name } = req.body;
-        const image = req.file.path;
-        const id = req.params.id;
+        const { name, image } = req.body;
+        const id = req.params.id
         try {
             const found = await characters.findOne({
                 where: { name }
@@ -81,7 +75,6 @@ class CharacterController {
             next(err)
         }
     }
-
     static async deleteChar(req, res, next) {
         const id = req.params.id
 
@@ -97,8 +90,6 @@ class CharacterController {
             // res.status(500).json(err)
             next(err)
         }
-    }
-
-   
+    }   
 }
 module.exports = CharacterController
