@@ -93,7 +93,7 @@ class reviewController {
                     movieId: movieId
                 },
                 include: [
-                    users,movies
+                   users,movies
                  ]
             })
             res.status(200).json(comments)
