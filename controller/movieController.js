@@ -73,13 +73,26 @@ class MovieController {
             const result = await movies.findOne({
                 where : { 
                     id 
-                }, 
-                include : [
-                    users
-                ]
+                } 
             })
             if (result){
-                res.status(200).json(result)
+                const rating = await reviews.findAll({
+                    where : { 
+                        movieId : id
+                    }
+                })
+                //rata-rata rate
+                let temp = 0
+                rating.forEach(el => {
+                    temp += el.rate
+                });
+                const Review = rating.length
+                const rate = temp/Review
+                res.status(200).json({
+                    average_rating : rate,
+                    Total_Review : Review,
+                    Movie : result
+                })
             } else {
                 res.status(404).json({
                 msg : 'Movie not found'

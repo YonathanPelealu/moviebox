@@ -10,7 +10,6 @@ const { upload } = require('../middlewares/multer')
 const movieController = require('../controller/movieController')
 const userController = require('../controller/userController')
 
-
 router.get('/:page', movieController.getMovie)
 
 router.post('/register',upload.single('image'), userController.register)
