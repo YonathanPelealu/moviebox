@@ -86,9 +86,11 @@ class MovieController {
                 rating.forEach(el => {
                     temp += el.rate
                 });
-                const rate = temp/rating.length
+                const Review = rating.length
+                const rate = temp/Review
                 res.status(200).json({
                     average_rating : rate,
+                    Total_Review : Review,
                     Movie : result
                 })
             } else {
